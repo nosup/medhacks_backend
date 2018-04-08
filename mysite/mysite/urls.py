@@ -14,6 +14,7 @@ urlpatterns = [
    path('account/signup/', SignupView.as_view(), name="account_signup"),
    path('account/login/', LoginView.as_view(), name="account_login"),
    path('account/', include('account.urls')),
+   path('account/application/', ApplicationView.as_view(), name="account_login")
 ]
 
 # urlpatterns = patterns(
