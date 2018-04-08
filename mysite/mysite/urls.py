@@ -2,11 +2,12 @@ from django.conf import settings
 
 from django.conf.urls.static import static
 from django.urls import include, path, re_path
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 
 from django.contrib import admin
 from .views import SignupView, LoginView
 
+from . import views
 
 urlpatterns = [
    path("", TemplateView.as_view(template_name="homepage.html"), name="home"),
@@ -14,7 +15,7 @@ urlpatterns = [
    path('account/signup/', SignupView.as_view(), name="account_signup"),
    path('account/login/', LoginView.as_view(), name="account_login"),
    path('account/', include('account.urls')),
-   path('account/application/', ApplicationView.as_view(), name="account_login")
+   path('account/application/', views.application, name="application")
 ]
 
 # urlpatterns = patterns(

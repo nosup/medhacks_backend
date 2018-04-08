@@ -2,7 +2,9 @@ import account.views
 from .forms import AppForm
 from .forms import SignupForm
 from .models import UserProfile
-from django.views.generic.edit import FormView
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # for LoginView
 import account.forms
@@ -26,7 +28,7 @@ class SignupView(account.views.SignupView):
         self.update_profile(form)
         super(SignupView, self).after_signup(form)
 
-class LoginView(FormView):
+class LoginView(account.views.LoginView):
 
     form_class = account.forms.LoginEmailForm
 
@@ -34,9 +36,13 @@ class LoginView(FormView):
         username = "<magic>"
         return username
 
-class ApplicationView(FormView):
-    template_name = 'application.html'
-    form_class = AppForm
-    success_url = '/thanks/'
-    def form_valid(self, form):
-        return super().form_valid(form)
+def application(request):
+    if request.method == 'POST':
+        form = AppForm(request.POST)
+        if form.is_valid():
+            #form.save()
+            return redirect('/account/login/')
+    else:
+        form = AppForm()
+        args = {'form': form}
+        return render(request, 'application.html', args)
